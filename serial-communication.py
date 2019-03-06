@@ -1,14 +1,17 @@
 import serial
 import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
 import matplotlib.animation as animation
 import numpy as np
 import datetime as dt
+from matplotlib.dates import AutoDateFormatter, AutoDateLocator
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 xs = []
 ys = []
 ser = serial.Serial()
+
 
 
 # This function is called periodically from FuncAnimation
@@ -19,12 +22,8 @@ def animate(i, x, y):
     movement = read_serial()
 
     # Add x and y to lists
-    x.append(dt.datetime.now().strftime('%H:%M:%S'))
+    x.append(dt.datetime.now())
     y.append(movement)
-
-    # Limit x and y lists to 20 items
-    x = x[-20:]
-    y = y[-20:]
 
     # Draw x and y lists
     ax.clear()
@@ -47,7 +46,7 @@ def connect_serial():
 
 
 def read_serial():
-    return np.random.uniform(0, 5)
+    return np.random.uniform(0, 256)
 
 
 if __name__ == '__main__':
