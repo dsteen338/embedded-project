@@ -26,7 +26,7 @@ def animate(i, x, y, end_time):
         ser.write(b'\x01')
         if not pause:
             total_minutes = read_serial() * 5
-            total_sleep = [0 for _ in xs]
+            total_sleep = [None for _ in xs]
             total_sleep[0] = total_minutes
             df = pd.DataFrame({
                 'time': [x.strftime("%Y-%m-%d %H:%M:%S") for x in xs],
@@ -46,7 +46,7 @@ def animate(i, x, y, end_time):
                       'so your least and most restful sleep period will be identical.')
                 offset = 6000
 
-            for i in range(len(xs)//200):
+            for i in range(len(xs)//6000):
                 summed = sum(ys[start:end])
                 if summed < minimum:
                     minimum = summed
@@ -93,7 +93,11 @@ def connect_serial():
 
 
 def read_serial():
-    return np.random.uniform(0, 150)
+	a = ser.read(1)
+	if a:
+		return ord(a)
+	else:
+		return None
 
 
 def get_end_time():
